@@ -50,21 +50,7 @@ public class HttpClientImpl implements HttpClient {
             URL postUrl = new URL(url);
             connection = (HttpURLConnection) postUrl.openConnection();
             connection.setRequestMethod("POST");
-            connection.setConnectTimeout(5000);
-            connection.setReadTimeout(5000);
-            connection.setDoOutput(true);
-
-            for (Map.Entry<String, String> entry : headers.entrySet()) {
-                connection.setRequestProperty(entry.getKey(), entry.getValue());
-            }
-
-            String jsonData = new ObjectMapper().writeValueAsString(data);
-            System.out.println("jsonData: " + jsonData);
-            try(OutputStream os = connection.getOutputStream()) {
-                byte[] input = jsonData.getBytes(StandardCharsets.UTF_8);
-                os.write(input, 0, input.length);
-            }
-        connection.disconnect();
+            workWithConnection(headers, data, connection);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -95,9 +81,8 @@ public class HttpClientImpl implements HttpClient {
         }
 
         String jsonData = new ObjectMapper().writeValueAsString(data);
-        System.out.println("jsonData: " + jsonData);
         try(OutputStream os = connection.getOutputStream()) {
-            byte[] input = jsonData.getBytes();
+            byte[] input = jsonData.getBytes(StandardCharsets.UTF_8);
             os.write(input, 0, input.length);
         }
 
