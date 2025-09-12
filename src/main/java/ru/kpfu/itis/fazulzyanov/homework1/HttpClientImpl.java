@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
@@ -28,7 +26,6 @@ public class HttpClientImpl implements HttpClient {
 
             StringBuilder resultParams =  new StringBuilder();
             for (Map.Entry<String, String> entry : params.entrySet()) {
-                // URLEncoder
                 resultParams.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
             }
             if (!resultParams.isEmpty()) {
@@ -104,7 +101,7 @@ public class HttpClientImpl implements HttpClient {
             os.write(input, 0, input.length);
         }
 
-//        connection.disconnect();
+        connection.disconnect();
     }
 
     @Override
@@ -127,36 +124,6 @@ public class HttpClientImpl implements HttpClient {
             throw new RuntimeException(e);
         }
         return readResponse(connection);
-    }
-
-    public String post1(String url, Map<String, String> headers, Map<String, String> data) {
-        try {
-            URL curUrl = new URI(url).toURL();
-            HttpURLConnection connection = (HttpURLConnection) curUrl.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setDoOutput(true);
-            for (Map.Entry<String, String> entry : headers.entrySet()) {
-                connection.setRequestProperty(entry.getKey(), entry.getValue());
-            }
-            connection.setConnectTimeout(5000);
-            connection.setReadTimeout(5000);
-            ObjectMapper mapper = new ObjectMapper();
-            String jsonBody = mapper.writeValueAsString(data);
-            try (OutputStream os = connection.getOutputStream()) {
-                os.write(jsonBody.getBytes(StandardCharsets.UTF_8));
-                os.flush();
-            }
-            StringBuilder response = new StringBuilder();
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-                String input;
-                while ((input = reader.readLine()) != null) {
-                    response.append(input);
-                }
-            }
-            return response.toString();
-        } catch (URISyntaxException | IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private static String readResponse(HttpURLConnection connection) {
