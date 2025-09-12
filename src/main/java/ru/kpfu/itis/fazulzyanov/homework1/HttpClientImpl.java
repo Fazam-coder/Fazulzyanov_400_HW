@@ -4,7 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class HttpClientImpl implements HttpClient {
@@ -47,10 +50,24 @@ public class HttpClientImpl implements HttpClient {
     public String post(String url, Map<String, String> headers, Map<String, String> data) {
         HttpURLConnection connection;
         try {
-            URL getUrl = new URL(url);
-            connection = (HttpURLConnection) getUrl.openConnection();
+            URL postUrl = new URL(url);
+            connection = (HttpURLConnection) postUrl.openConnection();
             connection.setRequestMethod("POST");
-            workWithConnection(headers, data, connection);
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(5000);
+            connection.setDoOutput(true);
+
+            for (Map.Entry<String, String> entry : headers.entrySet()) {
+                connection.setRequestProperty(entry.getKey(), entry.getValue());
+            }
+
+            String jsonData = new ObjectMapper().writeValueAsString(data);
+            System.out.println("jsonData: " + jsonData);
+            try(OutputStream os = connection.getOutputStream()) {
+                byte[] input = jsonData.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+        connection.disconnect();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -61,8 +78,8 @@ public class HttpClientImpl implements HttpClient {
     public String put(String url, Map<String, String> headers, Map<String, String> data) {
         HttpURLConnection connection;
         try {
-            URL getUrl = new URL(url);
-            connection = (HttpURLConnection) getUrl.openConnection();
+            URL putUrl = new URL(url);
+            connection = (HttpURLConnection) putUrl.openConnection();
             connection.setRequestMethod("PUT");
             workWithConnection(headers, data, connection);
         } catch (IOException e) {
@@ -81,19 +98,21 @@ public class HttpClientImpl implements HttpClient {
         }
 
         String jsonData = new ObjectMapper().writeValueAsString(data);
-        OutputStream os = connection.getOutputStream();
-        byte[] input = jsonData.getBytes();
-        os.write(input);
+        System.out.println("jsonData: " + jsonData);
+        try(OutputStream os = connection.getOutputStream()) {
+            byte[] input = jsonData.getBytes();
+            os.write(input, 0, input.length);
+        }
 
-        connection.disconnect();
+//        connection.disconnect();
     }
 
     @Override
     public String delete(String url, Map<String, String> headers, Map<String, String> data) {
         HttpURLConnection connection;
         try {
-            URL getUrl = new URL(url);
-            connection = (HttpURLConnection) getUrl.openConnection();
+            URL deleteUrl = new URL(url);
+            connection = (HttpURLConnection) deleteUrl.openConnection();
             connection.setRequestMethod("DELETE");
             connection.setConnectTimeout(5000);
             connection.setReadTimeout(5000);
@@ -108,6 +127,36 @@ public class HttpClientImpl implements HttpClient {
             throw new RuntimeException(e);
         }
         return readResponse(connection);
+    }
+
+    public String post1(String url, Map<String, String> headers, Map<String, String> data) {
+        try {
+            URL curUrl = new URI(url).toURL();
+            HttpURLConnection connection = (HttpURLConnection) curUrl.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setDoOutput(true);
+            for (Map.Entry<String, String> entry : headers.entrySet()) {
+                connection.setRequestProperty(entry.getKey(), entry.getValue());
+            }
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(5000);
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonBody = mapper.writeValueAsString(data);
+            try (OutputStream os = connection.getOutputStream()) {
+                os.write(jsonBody.getBytes(StandardCharsets.UTF_8));
+                os.flush();
+            }
+            StringBuilder response = new StringBuilder();
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+                String input;
+                while ((input = reader.readLine()) != null) {
+                    response.append(input);
+                }
+            }
+            return response.toString();
+        } catch (URISyntaxException | IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static String readResponse(HttpURLConnection connection) {
