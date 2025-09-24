@@ -68,7 +68,7 @@ public class HttpClientImpl implements HttpClient {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return readResponse(connection);
+        return "putted successfully";
     }
 
     private void workWithConnection(Map<String, String> headers, Map<String, String> data, HttpURLConnection connection) throws IOException {
@@ -108,7 +108,7 @@ public class HttpClientImpl implements HttpClient {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return readResponse(connection);
+        return "deleted successfully";
     }
 
     private static String readResponse(HttpURLConnection connection) {
