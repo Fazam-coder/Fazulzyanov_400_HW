@@ -11,8 +11,8 @@ import java.io.IOException;
 public class SignUpServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.sendRedirect("sign_up.ftl");
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        req.getRequestDispatcher("sign_up.ftl").forward(req, resp);
     }
 
     @Override
