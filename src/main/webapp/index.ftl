@@ -1,21 +1,18 @@
-<!DOCTYPE html>
-
 <html lang="en">
+<#include "base.ftl">
 
-<head>
-    <meta charset="UTF-8">
-    <title>Index page</title>
-</head>
+<#macro title>Index page</#macro>
 
-<body>
-<div id="my_body" class="block">
+<#macro content>
+
     <p>
         This is an example paragraph.
         Anything in the <strong>body</strong> tag will appear on the page.
     </p>
     Do you want more information?
     <a href="/login">Login</a>
-</div>
-</body>
+
+</#macro>
+
 
 </html>
