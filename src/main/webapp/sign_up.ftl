@@ -6,6 +6,11 @@
 <#macro content>
 
     <form method="post" action="/sign_up">
+        Name:
+        <input type="text" name="name">
+        Lastname:
+        <input type="text" name="lastname">
+        <br>
         Login:
         <input type="text" name="login" placeholder="type your login here">
         Password:

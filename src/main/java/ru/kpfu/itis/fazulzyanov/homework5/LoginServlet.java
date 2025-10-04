@@ -1,6 +1,7 @@
-package ru.kpfu.itis.fazulzyanov.homework3;
+package ru.kpfu.itis.fazulzyanov.homework5;
 
-import ru.kpfu.itis.fazulzyanov.homework4.dto.UserDto;
+import ru.kpfu.itis.fazulzyanov.homework5.services.UserService;
+import ru.kpfu.itis.fazulzyanov.homework5.services.impl.UserServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,11 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 @WebServlet(name = "Login", urlPatterns = "/login")
 public class LoginServlet extends HttpServlet {
+
+    UserService userService = new UserServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
@@ -31,27 +33,23 @@ public class LoginServlet extends HttpServlet {
         }
         String login = req.getParameter("login");
         String password = req.getParameter("password");
-        for (Map.Entry<String, String> entry : LoginPasswordBase.getMap().entrySet()) {
-            if (login.equals(entry.getKey()) && password.equals(entry.getValue())) {
-                // logic to authenticate user
+        if (userService.verifyUser(login, password)) {
+            // session
+            HttpSession httpSession = req.getSession();
+            httpSession.setAttribute("user", login);
+            httpSession.setMaxInactiveInterval(60 * 60);
 
-                // session
-                HttpSession httpSession = req.getSession();
-                httpSession.setAttribute("user", login);
-                httpSession.setMaxInactiveInterval(60 * 60);
+            // cookie
+            Cookie cookie = new Cookie("user", login);
+            cookie.setMaxAge(24 * 60 * 60);
 
-                // cookie
-                Cookie cookie = new Cookie("user", login);
-                cookie.setMaxAge(24 * 60 * 60);
-
-                resp.addCookie(cookie);
-                req.setAttribute("sessionUser", httpSession.getAttribute("user"));
-                req.setAttribute("cookies", req.getCookies());
-                req.setAttribute("session", httpSession);
-                req.getRequestDispatcher("main.ftl").forward(req, resp);
-                // without return, the server crashes
-                return;
-            }
+            resp.addCookie(cookie);
+            req.setAttribute("sessionUser", httpSession.getAttribute("user"));
+            req.setAttribute("cookies", req.getCookies());
+            req.setAttribute("session", httpSession);
+            req.getRequestDispatcher("main.ftl").forward(req, resp);
+            // without return, the server crashes
+            return;
         }
         resp.sendRedirect("/login");
     }

@@ -1,6 +1,8 @@
 package ru.kpfu.itis.fazulzyanov.homework4;
 
 import ru.kpfu.itis.fazulzyanov.homework4.dto.UserDto;
+import ru.kpfu.itis.fazulzyanov.homework5.services.UserService;
+import ru.kpfu.itis.fazulzyanov.homework5.services.impl.UserServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,10 +14,13 @@ import java.util.List;
 
 @WebServlet(name = "User", urlPatterns = "/user")
 public class UserServlet extends HttpServlet {
+    // использовать dependency injection
+    private final UserService userService = new UserServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("users", List.of(new UserDto("Ivan", 100, "pro100Ivan")));
+        List<UserDto> users = userService.getAll();
+        req.setAttribute("users", users);
         req.getRequestDispatcher("users.ftl").forward(req, resp);
     }
 }
