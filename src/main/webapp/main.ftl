@@ -7,6 +7,7 @@
     <h3>
         Hello, ${sessionUser}! Login successful
         <br>
+        <#assign cookieUser = "Не установлен">
         <#if cookies?has_content>
             <#list cookies as c>
                 <#if "user" == (c.name!"")?lower_case>

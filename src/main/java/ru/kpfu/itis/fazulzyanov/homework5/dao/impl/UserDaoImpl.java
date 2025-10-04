@@ -47,6 +47,7 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.setString(2, user.getLastname());
             preparedStatement.setString(3, user.getLogin());
             preparedStatement.setString(4, user.getPassword());
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -58,16 +59,7 @@ public class UserDaoImpl implements UserDao {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet == null) throw new IllegalArgumentException();
-            resultSet.next();
-            return new User(
-                    resultSet.getInt("id"),
-                    resultSet.getString("name"),
-                    resultSet.getString("lastname"),
-                    resultSet.getString("login"),
-                    resultSet.getString("password")
-            );
+            return getUser(preparedStatement);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -79,19 +71,25 @@ public class UserDaoImpl implements UserDao {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, login);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet == null) throw new IllegalArgumentException();
-            resultSet.next();
-            return new User(
+            return getUser(preparedStatement);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private User getUser(PreparedStatement preparedStatement) throws SQLException, IllegalArgumentException {
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()) {
+            User user = new User(
                     resultSet.getInt("id"),
                     resultSet.getString("name"),
                     resultSet.getString("lastname"),
                     resultSet.getString("login"),
                     resultSet.getString("password")
             );
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            return user;
         }
+        throw new IllegalArgumentException();
     }
 
 
