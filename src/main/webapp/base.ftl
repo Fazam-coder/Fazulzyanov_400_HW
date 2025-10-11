@@ -12,7 +12,7 @@
 <body>
 <div id="header">
     <h3>Header 12345</h3>
-    <a href="/logout">Выйти</a>
+    <a href="/logout">Logout</a>
     <br>
 </div>
 

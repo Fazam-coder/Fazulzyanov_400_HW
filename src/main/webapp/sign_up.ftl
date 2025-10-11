@@ -11,21 +11,15 @@
         login: $('#login').val(),
         password: $('#password').val(),
     };
-
-    // if (!formData.name || !formData.lastname || !formData.login || !formData.password) {
-    //     alert('Заполните все поля!');
-    //     return;
-    // }
-
-    $.get("/check-login?login=" + formData.login.trim(), function (response) {
-        if (response === "true") {
-            $("#loginStatus").text("Логин занят")
-            $('#submitBtn').prop('disabled', true);
-        } else {
-            $("#loginStatus").text("Логин свободен")
-            $('#submitBtn').prop('disabled', false);
-        }
-    })
+        $.get("/check-login?login=" + formData.login.trim(), function (response) {
+            if (response === "true") {
+                $("#loginStatus").text("Login already exists").removeClass("text-success").addClass("text-danger");
+                $('#submitBtn').prop('disabled', true);
+            } else if (response === "false") {
+                $("#loginStatus").text("Login is available").removeClass("text-danger").addClass("text-success");
+                $('#submitBtn').prop('disabled', false);
+            }
+        });
 
     });</script>
 
