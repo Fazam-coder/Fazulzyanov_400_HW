@@ -11,4 +11,6 @@ public interface UserService {
     void save(String name, String lastname, String login, String password);
 
     boolean verifyUser(String login, String password);
+
+    boolean existsLogin(String login);
 }

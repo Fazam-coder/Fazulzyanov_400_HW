@@ -37,4 +37,13 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public boolean existsLogin(String login) {
+        try {
+            userDao.getByLogin(login);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
 }
