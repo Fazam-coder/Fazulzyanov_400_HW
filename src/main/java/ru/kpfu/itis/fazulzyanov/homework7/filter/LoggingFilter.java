@@ -1,4 +1,4 @@
-package ru.kpfu.itis.fazulzyanov.homework4.filter;
+package ru.kpfu.itis.fazulzyanov.homework7.filter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -6,6 +6,7 @@ public class User {
     private String lastname;
     private String login;
     private String password;
+    private String imagePath;
 
     public User() {}
 
@@ -15,6 +16,14 @@ public class User {
         this.lastname = lastname;
         this.login = login;
         this.password = password;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public String getName() {

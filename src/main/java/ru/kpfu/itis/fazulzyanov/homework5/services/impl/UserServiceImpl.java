@@ -20,11 +20,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void save(String name, String lastname, String login, String password) {
+    public void save(String name, String lastname, String login, String password, String imagePath) {
         password = PasswordUtil.encrypt(password);
         // default value
         Integer id = 1;
-        userDao.save(new User(id, name, lastname, login, password));
+        User user = new User(id, name, lastname, login, password);
+        if (imagePath == null) {
+            user.setImagePath("");
+        } else {
+            user.setImagePath(imagePath);
+        }
+        userDao.save(user);
     }
 
     @Override
@@ -45,5 +51,10 @@ public class UserServiceImpl implements UserService {
         } catch (IllegalArgumentException e) {
             return false;
         }
+    }
+
+    @Override
+    public String getImagePathByLogin(String login) {
+        return userDao.getByLogin(login).getImagePath();
     }
 }

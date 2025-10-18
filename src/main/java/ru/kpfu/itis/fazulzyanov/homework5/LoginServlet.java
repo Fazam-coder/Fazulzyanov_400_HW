@@ -47,6 +47,7 @@ public class LoginServlet extends HttpServlet {
             req.setAttribute("sessionUser", httpSession.getAttribute("user"));
             req.setAttribute("cookies", req.getCookies());
             req.setAttribute("session", httpSession);
+            req.setAttribute("imagePath", userService.getImagePathByLogin(login));
             req.getRequestDispatcher("main.ftl").forward(req, resp);
             // without return, the server crashes
             return;

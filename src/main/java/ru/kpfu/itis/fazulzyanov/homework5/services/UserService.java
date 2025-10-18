@@ -8,9 +8,11 @@ import java.util.List;
 public interface UserService {
     List<UserDto> getAll();
 
-    void save(String name, String lastname, String login, String password);
+    void save(String name, String lastname, String login, String password, String imageName);
 
     boolean verifyUser(String login, String password);
 
     boolean existsLogin(String login);
+
+    String getImagePathByLogin(String login);
 }

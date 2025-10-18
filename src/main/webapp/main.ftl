@@ -19,10 +19,11 @@
         <#else>
             <#assign sessionId = session.id>
         </#if>
-        Session ID = ${sessionId}
+        Session ID = ${sessionId!}
         <br>
         Cookie user = ${cookieUser}
     </h3>
+    <img src="${imagePath}">
 
 </#macro>
 

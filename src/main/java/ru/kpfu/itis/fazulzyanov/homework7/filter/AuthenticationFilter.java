@@ -1,4 +1,4 @@
-package ru.kpfu.itis.fazulzyanov.homework4.filter;
+package ru.kpfu.itis.fazulzyanov.homework7.filter;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
