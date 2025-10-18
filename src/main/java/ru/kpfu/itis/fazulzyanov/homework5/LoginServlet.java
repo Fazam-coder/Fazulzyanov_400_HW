@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
@@ -43,11 +44,14 @@ public class LoginServlet extends HttpServlet {
             Cookie cookie = new Cookie("user", login);
             cookie.setMaxAge(24 * 60 * 60);
 
+            String imagePath = userService.getImagePathByLogin(login);
+            String imageName = imagePath.substring(imagePath.lastIndexOf(File.separator) + 1);
+
             resp.addCookie(cookie);
             req.setAttribute("sessionUser", httpSession.getAttribute("user"));
             req.setAttribute("cookies", req.getCookies());
             req.setAttribute("session", httpSession);
-            req.setAttribute("imagePath", userService.getImagePathByLogin(login));
+            req.setAttribute("imageName", imageName);
             req.getRequestDispatcher("main.ftl").forward(req, resp);
             // without return, the server crashes
             return;

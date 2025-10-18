@@ -21,7 +21,7 @@ import java.nio.file.Paths;
 )
 public class FileUploadServlet extends HttpServlet {
 
-    public static final String FILE_PREFIX = "/tmp";
+    public static final String FILE_PREFIX = "\\tmp";
     public static final int DIRECTORIES_COUNT = 100;
 
     @Override

@@ -23,7 +23,7 @@
         <br>
         Cookie user = ${cookieUser}
     </h3>
-    <img src="${imagePath}">
+    <img src="/files/${imageName}">
 
 </#macro>
 
