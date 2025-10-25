@@ -1,4 +1,4 @@
-package ru.kpfu.itis.fazulzyanov.homework5.util;
+package ru.kpfu.itis.fazulzyanov.homework8.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

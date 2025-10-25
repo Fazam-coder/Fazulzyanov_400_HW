@@ -5,7 +5,7 @@ import ru.kpfu.itis.fazulzyanov.homework5.dao.impl.UserDaoImpl;
 import ru.kpfu.itis.fazulzyanov.homework4.dto.UserDto;
 import ru.kpfu.itis.fazulzyanov.homework5.entity.User;
 import ru.kpfu.itis.fazulzyanov.homework5.services.UserService;
-import ru.kpfu.itis.fazulzyanov.homework5.util.PasswordUtil;
+import ru.kpfu.itis.fazulzyanov.homework8.util.PasswordUtil;
 
 import java.util.List;
 

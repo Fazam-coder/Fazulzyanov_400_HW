@@ -2,7 +2,7 @@ package ru.kpfu.itis.fazulzyanov.homework5.dao.impl;
 
 import ru.kpfu.itis.fazulzyanov.homework5.dao.UserDao;
 import ru.kpfu.itis.fazulzyanov.homework5.entity.User;
-import ru.kpfu.itis.fazulzyanov.homework5.util.DatabaseConnectionUtil;
+import ru.kpfu.itis.fazulzyanov.homework8.util.DatabaseConnectionUtil;
 
 import java.sql.*;
 import java.util.ArrayList;

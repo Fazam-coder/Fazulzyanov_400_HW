@@ -1,4 +1,7 @@
-package ru.kpfu.itis.fazulzyanov.homework7;
+package ru.kpfu.itis.fazulzyanov.homework8;
+
+import com.cloudinary.Cloudinary;
+import ru.kpfu.itis.fazulzyanov.homework8.util.CloudinaryUtil;
 
 import javax.servlet.http.Part;
 import java.io.File;
@@ -6,10 +9,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
+import java.util.HashMap;
 
 public class FileService {
     public static final String FILE_PREFIX = "\\tmp";
     public static final int DIRECTORIES_COUNT = 100;
+    public static final Cloudinary cloudinary = CloudinaryUtil.getInstance();
 
     public static String saveAndGetPathname(Part part) throws IOException {
         String filename = Paths.get(part.getSubmittedFileName()).getFileName().toString();
@@ -25,6 +30,6 @@ public class FileService {
         outputStream.write(buffer);
         outputStream.close();
 
-        return pathname;
+        return cloudinary.uploader().upload(file, new HashMap()).get("url").toString();
     }
 }

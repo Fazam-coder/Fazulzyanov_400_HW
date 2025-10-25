@@ -45,13 +45,12 @@ public class LoginServlet extends HttpServlet {
             cookie.setMaxAge(24 * 60 * 60);
 
             String imagePath = userService.getImagePathByLogin(login);
-            String imageName = imagePath.substring(imagePath.lastIndexOf(File.separator) + 1);
 
             resp.addCookie(cookie);
             req.setAttribute("sessionUser", httpSession.getAttribute("user"));
             req.setAttribute("cookies", req.getCookies());
             req.setAttribute("session", httpSession);
-            req.setAttribute("imageName", imageName);
+            req.setAttribute("imagePath", imagePath);
             req.getRequestDispatcher("main.ftl").forward(req, resp);
             // without return, the server crashes
             return;

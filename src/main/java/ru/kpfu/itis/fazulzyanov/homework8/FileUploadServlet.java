@@ -1,5 +1,8 @@
-package ru.kpfu.itis.fazulzyanov.homework7;
+package ru.kpfu.itis.fazulzyanov.homework8;
 
+
+import com.cloudinary.Cloudinary;
+import ru.kpfu.itis.fazulzyanov.homework8.util.CloudinaryUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -13,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
+import java.util.HashMap;
 
 @WebServlet("/upload")
 @MultipartConfig(
@@ -23,6 +27,7 @@ public class FileUploadServlet extends HttpServlet {
 
     public static final String FILE_PREFIX = "\\tmp";
     public static final int DIRECTORIES_COUNT = 100;
+    public static final Cloudinary cloudinary = CloudinaryUtil.getInstance();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -39,6 +44,8 @@ public class FileUploadServlet extends HttpServlet {
         content.read(buffer);
         outputStream.write(buffer);
         outputStream.close();
+
+        String url = cloudinary.uploader().upload(file, new HashMap()).get("url").toString();
 
     }
 }

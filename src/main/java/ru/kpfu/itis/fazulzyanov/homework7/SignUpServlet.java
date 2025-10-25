@@ -2,6 +2,7 @@ package ru.kpfu.itis.fazulzyanov.homework7;
 
 import ru.kpfu.itis.fazulzyanov.homework5.services.UserService;
 import ru.kpfu.itis.fazulzyanov.homework5.services.impl.UserServiceImpl;
+import ru.kpfu.itis.fazulzyanov.homework8.FileService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
