@@ -12,7 +12,7 @@ import java.time.Duration;
 
 public class ChatBotLogic {
 
-    private static final String API_KEY = "API_KEY";
+    private static final String API_KEY = "de0e33285bda6ffce57ee47a6a16abc5";
     private static final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather";
     private static final String EXCHANGE_URL = "https://open.er-api.com/v6/latest/USD";
 
@@ -55,7 +55,7 @@ public class ChatBotLogic {
 
     private String getWeather(String city) {
         try {
-            String url = WEATHER_URL + "?q=" + city + "?app_id=" + API_KEY;
+            String url = WEATHER_URL + "?q=" + city + "&appid=" + API_KEY;
             HttpRequest req = HttpRequest.newBuilder()
                     .uri(URI.create(url))
                     .timeout(Duration.ofSeconds(10))
@@ -68,7 +68,7 @@ public class ChatBotLogic {
                 JsonNode root = jsonMapper.readTree(resp.body());
                 String desc = root.path("weather").get(0).path("description").asText();
                 double temp = root.path("main").path("temp").asDouble();
-                return String.format("🌤 %s: %s, %.1f°C", city, desc, temp);
+                return String.format("%s: %s, %.1f°C", city, desc, temp - 273);
             } else {
                 return "Город не найден";
             }
